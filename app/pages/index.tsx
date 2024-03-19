@@ -1,21 +1,9 @@
 // pages/index.tsx
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { User } from '../models/User';
 
-type User = {
-  id: number;
-  name: string;
-};
-
-export default function Home() {
-  const [users, setUsers] = useState<User[]>([]);
-
-  useEffect(() => {
-    fetch('/api/users')
-      .then(response => response.json())
-      .then(data => setUsers(data));
-  }, []);
-
+const HomePage: React.FC<{ users: User[] }> = ({ users }) => {
   return (
     <div>
       <h1>User List</h1>
@@ -30,4 +18,16 @@ export default function Home() {
       </ul>
     </div>
   );
+};
+
+export async function getStaticProps() {
+  // Fetch data from API route
+  const res = await fetch('http://localhost:3000/api/users');
+  const users = await res.json();
+
+  return {
+    props: { users },
+  };
 }
+
+export default HomePage;
