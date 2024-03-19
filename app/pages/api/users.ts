@@ -1,18 +1,17 @@
 // pages/api/users.ts
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getAllUsers, getUserById } from '../../controllers/UserController';
 
-type User = {
-  id: number;
-  name: string;
-  relationship: string;
-};
-
-const users: User[] = [
-  { id: 1, name: 'John Doe', relationship: 'Friend' },
-  { id: 2, name: 'Jane Smith', relationship: 'Family' },
-  // Add more users here
-];
-
-export default function handler(req: NextApiRequest, res: NextApiResponse<User[]>) {
-  res.status(200).json(users);
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'GET') {
+    // Get all users
+    const users = getAllUsers();
+    res.status(200).json(users);
+  } else if (req.method === 'POST') {
+    // Create a new user (not implemented in this example)
+    res.status(501).json({ message: 'Not implemented' });
+  } else {
+    // Handle unsupported methods
+    res.status(405).json({ message: 'Method not allowed' });
+  }
 }
